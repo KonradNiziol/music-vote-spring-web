@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>INDEX</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/index.css"/>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+    <script src="/js/index.js"></script>
+</head>
+<body>
+<div th:include="fragments/menu"></div>
+<div class="container">
+    <div class="row">
+        <div class="col-8 offset-2">
+            <table class="table table-bordered">
+                <thead>
+                <th>#</th>
+                <th>Name</th>
+                <th>Surname</th>
+                <th>Age</th>
+                <th></th>
+                </thead>
+                <tbody>
+                <tr th:each="track, iter : ${tracks}">
+                    <td th:text="${iter.count}"></td>
+                    <td th:text="${track.title}"></td>
+                    <td th:text="${track.artist}"></td>
+                    <td th:text="${track.genre.toString()}"></td>
+                    <td>
+                        <form th:action="@{/vote/date}" th:object="${vote}" method="post" novalidate>
+                            <input id="trackId" name="trackId" type="number" th:value="${track.id}" hidden="hidden" />
+                            <input id="userId" name="userId" type="number" th:value="${vote.userId}" hidden="hidden" />
+                            <button class="btn btn-primary mr-1" type="submit">Select</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

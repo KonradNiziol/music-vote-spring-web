@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>INDEX</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/index.css"/>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+    <script src="/js/index.js"></script>
+</head>
+<body>
+<div th:include="fragments/menu"></div>
+<div class="container">
+    <h1>Statistics!</h1>
+    <h2>The best tracks:</h2>
+    <form method="post" th:action="@{/statistics/form}" th:object="${parameters}" novalidate>
+
+        <div class="form-group">
+            <label for="numberOfTopTrack">How many tracks: </label>
+            <input id="numberOfTopTrack" type="number" class="form-control" th:field="*{numberOfTopTrack}" placeholder="Enter surname"/>
+        </div>
+
+
+        <button type="submit" class="btn btn-default">Submit</button>
+    </form>
+
+    <div class="row">
+        <div class="col-8 offset-2">
+            <table class="table">
+                    <thead class="thead-dark">
+                        <th scope="col">#</th>
+                        <th scope="col">Title</th>
+                        <th scope="col">Artist</th>
+                        <th scope="col">Genre</th>
+                        <th scope="col">Votes</th>
+                    </thead>
+                <tbody>
+                    <tr th:each="track, iter : ${mostPopularTrack}">
+                        <th scope="row" th:text="${iter.count}"></th>
+                        <td th:text="${track.title}"></td>
+                        <td th:text="${track.artist}"></td>
+                        <td th:text="${track.genre.toString()}"></td>
+                        <td th:text="${track.numberOfVoices}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <h2>--------------------------------------------------------------------------------------------------------</h2>
+    <h2>A list of the best tracks of its genre:</h2>
+    <div class="row">
+        <div class="col-8 offset-2">
+            <table class="table">
+                <thead class="thead-dark">
+                <th scope="col">#</th>
+                <th scope="col">Genre</th>
+                <th scope="col">Title</th>
+                <th scope="col">Artist</th>
+                <th scope="col">Votes</th>
+                </thead>
+                <tbody>
+                    <tr th:each="track, iter : ${topGenre}">
+                        <th scope="row" th:text="${iter.count}"></th>
+                        <td th:text="${track.genre.toString()}"></td>
+                        <td th:text="${track.title}"></td>
+                        <td th:text="${track.artist}"></td>
+                        <td th:text="${track.numberOfVoices}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <h2>--------------------------------------------------------------------------------------------------------</h2>
+    <h2>A list of the best tracks for age:</h2>
+    <div class="row">
+        <div class="col-8 offset-2">
+            <table class="table">
+                <thead class="thead-dark">
+                <th scope="col">#</th>
+                <th scope="col">Age</th>
+                <th scope="col">Title</th>
+                <th scope="col">Artist</th>
+                <th scope="col">Genre</th>
+                <th scope="col">Voices</th>
+
+                </thead>
+                <tbody>
+                <tr th:each="entry, iter : ${ageToTrack}">
+                    <th scope="row" th:text="${iter.count}"></th>
+                    <td th:text="${entry.getKey().toString()}"></td>
+                    <td th:text="${entry.getValue().title}"></td>
+                    <td th:text="${entry.getValue().artist}"></td>
+                    <td th:text="${entry.getValue().genre?.toString()}"></td>
+                    <td th:text="${entry.getValue().numberOfVoices}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <h2>--------------------------------------------------------------------------------------------------------</h2>
+    <h2>A list of the best tracks for selected artist:</h2>
+
+    <form method="post" th:action="@{/statistics/form}" th:object="${parametersArtist}" novalidate>
+
+        <div class="form-group">
+            <label for="numberOfTrack">How many tracks: </label>
+            <input id="numberOfTrack" type="number" class="form-control" th:field="*{numberOfTrack}" placeholder="Enter surname"/>
+        </div>
+        <div class="form-group">
+            <label for="artist">Select artists:</label>
+            <select id="artist" th:field="*{artist}">
+                <option th:each="artist : ${allArtists}" th:value="${artist}" th:text="${artist}"></option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+    </form>
+    <div class="row">
+        <div class="col-8 offset-2">
+            <table class="table">
+                <thead class="thead-dark">
+                <th scope="col">#</th>
+                <th scope="col">Title</th>
+                <th scope="col">Artist</th>
+                <th scope="col">Genre</th>
+                <th scope="col">Votes</th>
+                </thead>
+                <tbody>
+                <tr th:each="track, iter : ${topArtistTrack}">
+                    <th scope="row" th:text="${iter.count}"></th>
+                    <td th:text="${track.title}"></td>
+                    <td th:text="${track.artist}"></td>
+                    <td th:text="${track.genre.toString()}"></td>
+                    <td th:text="${track.numberOfVoices}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
